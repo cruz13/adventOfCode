@@ -22,6 +22,21 @@ fn compare_compartments(compartment_1: &String, compartment_2: &String) -> Vec<c
     chars_in_both_compartments 
 }
 
+fn compare_rucksacks(rucksack1: &str, rucksack2: &str, rucksack3: &str) -> Vec<char> {
+    // Should probably use one function for `compare_compartments` and `compare_rucksacks`
+    let mut chars_in_common = Vec::new();
+    for char in rucksack1.chars() {
+        for char2 in rucksack2.chars() {
+            for char3 in rucksack3.chars() {
+                if char == char2 && char == char3 && ! chars_in_common.contains(&char) {
+                    chars_in_common.push(char);
+                }
+            }
+        }
+    }
+    chars_in_common
+}
+
 fn calculate_sum_of_priorities(items: Vec<char>) -> usize {
     let mut range1:Vec<char> = (b'a'..=b'z').map(char::from).collect::<Vec<_>>();
     let mut range2:Vec<char> = (b'A'..=b'Z').map(char::from).collect::<Vec<_>>();
@@ -39,12 +54,25 @@ fn main() {
     let content = get_content(3, DataType::Input);
 
     let mut common_items = Vec::new();
+    let mut elf = 0;
+    let mut group_of_elves: Vec<&str> = Vec::new();
+    let mut badges = Vec::new();
 
     for line in content.lines() {
         let mut common_item = compare_compartments(&extract_compartments(line)[0], &extract_compartments(line)[1]); 
-        //println!("{} [{:?}] -- commons: {:?}", line, extract_compartments(line), compare_compartments(&extract_compartments(line)[0], &extract_compartments(line)[1]));
         common_items.append(&mut common_item);
-        //println!("{} {:?}", line, extract_compartments(line));
+
+        elf += 1;
+        group_of_elves.push(line);
+        println!("Pushing line {} into group : {:?}", line, group_of_elves);
+        if elf % 3 == 0 {
+            println!("Group of elves has the following 3 rucksacks: {:?}", group_of_elves);
+            let mut badge = compare_rucksacks(group_of_elves[0], group_of_elves[1], group_of_elves[2]);
+            badges.append(&mut badge);
+            group_of_elves.clear();
+        }
     }
+    // println!("{:?}", common_items);
     println!("Part 1 : Sum of priorities: {}", calculate_sum_of_priorities(common_items));
+    println!("Part 2 : badges: {}", calculate_sum_of_priorities(badges));
 }
