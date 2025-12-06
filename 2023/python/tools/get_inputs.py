@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 DESTINATION_PATH = Path("src/pyadvent23/assets")
-sessionToken = "53616c7465645f5f8f73a54f2d01c5b555bedb2e3905f4c4a6cbead0d837071ea06585b37bb420c713d1e398a5d0a68703b391e05b937b8abdc2ed7e60ffb50d"
+sessionToken = ""
 
 def get_inputs(year: int, day: int) -> httpx.Response:
     """Get inputs for given year and day
